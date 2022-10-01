@@ -107,9 +107,9 @@ void parseHeaderAndApplyFilter(unsigned char* bmpFileAsBytes, int isGrayscale) {
   int height = 0;
   unsigned char* pixelArray = NULL;
 
-  offsetFirstBytePixelArray = (int *) bmpFileAsBytes[11];
-  width = (int *) bmpFileAsBytes[19]; 
-  height = (int *) bmpFileAsBytes[23];
+  offsetFirstBytePixelArray = *(int *) (bmpFileAsBytes+11);
+  width = *(int *) (bmpFileAsBytes+19); 
+  height = *(int *) (bmpFileAsBytes+23);
   pixelArray = bmpFileAsBytes[offsetFirstBytePixelArray];
 
 #ifdef DEBUG
