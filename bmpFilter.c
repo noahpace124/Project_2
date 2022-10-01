@@ -70,12 +70,23 @@ void getBmpFileAsBytes(unsigned char* ptr, unsigned fileSizeInBytes, FILE* strea
 }
 
 unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsigned char red) {
-  printf("TODO: unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsigned char red)\n");
-  return 0;
+  return ((blue + green + red)/3);
+}
+
+int getPadding(int width)
+{
+    int r = width % 4;
+    return r;
 }
 
 void applyGrayscaleToPixel(unsigned char* pixel) {
-  printf("TODO: void applyGrayscaleToPixel(unsigned char* pixel)\n");
+  unsigned char blue = *(pixel);
+  unsigned char green = *(pixel+1);
+  unsigned char red = *(pixel+2);
+  int intensity = getAverageIntensity(blue, green, red);
+  blue = intensity;
+  green = intensity;
+  red = intensity;
 }
 
 void applyThresholdToPixel(unsigned char* pixel) {
@@ -83,22 +94,30 @@ void applyThresholdToPixel(unsigned char* pixel) {
 }
 
 void applyFilterToPixel(unsigned char* pixel, int isGrayscale) {
-  printf("TODO: void applyFilterToPixel(unsigned char* pixel, int isGrayscale)\n");
+  if (isGrayscale == TRUE) {
+	applyGrayscaleToPixel(pixel);
+  } else {
+	applyThresholdToPixel(pixel);
+  }
 }
 
 void applyFilterToRow(unsigned char* row, int width, int isGrayscale) {
-  printf("TODO: void applyFilterToRow(unsigned char* row, int width, int isGrayscale)\n");
+  for (unsigned i = 0; i < width; i++) {
+	applyFilterToPixel(row, isGrayscale);
+	row = (row+3);
+  }
 }
 
 void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale) {
-  int padding = 0;
-  printf("TODO: compute the required amount of padding from the image width");
-
+  int padding = getPadding((width*3));
 #ifdef DEBUG
   printf("padding = %d\n", padding);
 #endif  
-  
-  printf("TODO: void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale)\n");
+  unsigned char* row = pixelArray;
+  for (unsigned i = 0; i < height; i++) {
+	applyFilterToRow(row, width, isGrayscale);
+	row = (row + (width*3) + padding);
+  }
 }
 
 void parseHeaderAndApplyFilter(unsigned char* bmpFileAsBytes, int isGrayscale) {
