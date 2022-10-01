@@ -73,8 +73,7 @@ unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsig
   return ((blue + green + red)/3);
 }
 
-int getPadding(int width)
-{
+int getPadding(int width) {
     int r = width % 4;
     return r;
 }
@@ -84,13 +83,25 @@ void applyGrayscaleToPixel(unsigned char* pixel) {
   unsigned char green = *(pixel+1);
   unsigned char red = *(pixel+2);
   int intensity = getAverageIntensity(blue, green, red);
-  blue = intensity;
-  green = intensity;
-  red = intensity;
+  *(pixel) = intensity;
+  *(pixel+1) = intensity;
+  *(pixel+2) = intensity;
 }
 
 void applyThresholdToPixel(unsigned char* pixel) {
-  printf("TODO: void applyThresholdToPixel(unsigned char* pixel)\n");
+  unsigned char blue = *(pixel);
+  unsigned char green = *(pixel+1);
+  unsigned char red = *(pixel+2);
+  int intensity = getAverageIntensity(blue, green, red);
+  if (intensity >= 128) {
+	*(pixel) = 0xff;
+    *(pixel+1) = 0xff;
+    *(pixel+2) = 0xff;
+  } else {
+	*(pixel) = 0x00;
+    *(pixel+1) = 0x00;
+    *(pixel+2) = 0x00;
+  }
 }
 
 void applyFilterToPixel(unsigned char* pixel, int isGrayscale) {
