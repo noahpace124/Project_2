@@ -115,7 +115,7 @@ void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, i
 #endif  
   unsigned char* row = pixelArray;
   for (unsigned i = 0; i < height; i++) {
-	//applyFilterToRow(row, width, isGrayscale);
+	applyFilterToRow(row, width, isGrayscale);
 	row = (row + (width*3) + padding);
   }
 }
